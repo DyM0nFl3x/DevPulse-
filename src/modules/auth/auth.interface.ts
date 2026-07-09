@@ -6,3 +6,9 @@ export interface ISignupPayload {
   password: string;
   role?: Role;
 }
+
+
+export interface ILoginPayload {
+  email: string;
+  password: string;
+}

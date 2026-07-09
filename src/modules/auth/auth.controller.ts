@@ -17,14 +17,16 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const login = (req: Request, res: Response, next: NextFunction) => {
+const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const {generateToken:token,rest:user} = await authService.loginService(req.body);
+    // console.log(result);
+    sendResponse(res, 200, {
+      message: "User login successfully.",
+      data: {token,user},
+    });
   } catch (error) {
     next(error);
   }
-  sendResponse(res, 201, {
-    message: "User created successfully.",
-    // data: result,
-  });
 };
 export const authController = { signup, login };

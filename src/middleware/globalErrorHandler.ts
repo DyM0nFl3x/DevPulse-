@@ -12,9 +12,6 @@ export const globalErrorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  console.log("🔥 Global Error Handler");
-  console.log(error);
-
   // PostgreSQL Errors
   if (
     typeof error === "object" &&

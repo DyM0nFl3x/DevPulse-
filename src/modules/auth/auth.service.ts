@@ -1,6 +1,8 @@
 import { compare, hash } from "bcrypt";
-import type { ISignupPayload } from "./auth.interface";
+import type { ILoginPayload, ISignupPayload } from "./auth.interface";
 import { pool } from "../../db";
+import jwt from "jsonwebtoken";
+import config from "../../config";
 
 const signupService = async (payload: ISignupPayload) => {
   console.log(payload);
@@ -19,6 +21,42 @@ const signupService = async (payload: ISignupPayload) => {
   return result.rows[0];
 };
 
+const loginService = async (payload: ILoginPayload) => {
+  const { email, password } = payload;
+  //Check if user exists?
+  const checkUserFromDB = await pool.query(
+    `
+    SELECT * FROM users
+    WHERE email=$1
+    `,
+    [email],
+  );
+
+  if (checkUserFromDB.rowCount === 0) {
+    throw new Error("Invalid Credentials or user not found!");
+  }
+  //Get user data
+  const userData = checkUserFromDB.rows[0];
+  const { password: hashPassword, ...rest } = userData;
+  const comparePassword = await compare(password, hashPassword);
+
+  if (comparePassword) {
+    //token generation
+    const jwtPayload = {
+      id: rest.id,
+      name: rest.name,
+      role: rest.role,
+    };
+
+    const generateToken = jwt.sign(jwtPayload, config.secret,{expiresIn:config.tokenExpiresIn});
+
+    return { rest, generateToken };
+  } else {
+    throw new Error("Invalid Credentials!");
+  }
+};
+
 export const authService = {
   signupService,
+  loginService,
 };
