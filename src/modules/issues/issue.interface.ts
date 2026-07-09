@@ -13,3 +13,4 @@ export interface IAllIssue {
   type?: IIssueType;
   status?: IIssueStatus;
 }
+

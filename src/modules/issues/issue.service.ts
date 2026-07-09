@@ -33,8 +33,57 @@ const getSingleDBIssue = async (id: number) => {
   return issue.rows;
 };
 
+const updateDBIssue = async (data: Partial<IIssue>, id: number) => {
+  const { title, description, type } = data;
+
+  // At least one field is required
+  if (title === undefined && description === undefined && type === undefined) {
+    throw new Error("No data provided for update");
+  }
+
+  // Check issue exists
+  const existing = await pool.query("SELECT * FROM issues WHERE id = $1", [id]);
+
+  if (existing.rowCount === 0) {
+    throw new Error("No issues found");
+  }
+
+  const issue = existing.rows[0];
+
+  // Check if anything actually changed
+  const newTitle = title ?? issue.title;
+  const newDescription = description ?? issue.description;
+  const newType = type ?? issue.type;
+
+  if (
+    newTitle === issue.title &&
+    newDescription === issue.description &&
+    newType === issue.type
+  ) {
+    throw new Error("No changes detected");
+  }
+
+  // Update
+  const result = await pool.query(
+    `
+  UPDATE issues
+  SET
+    title = $1,
+    description = $2,
+    type = $3,
+    updated_at = NOW()
+  WHERE id = $4
+  RETURNING *;
+  `,
+    [newTitle, newDescription, newType, id],
+  );
+
+  return result.rows[0];
+};
+
 export const issue = {
   createIssueInDB,
   getAllDBIssues,
   getSingleDBIssue,
+  updateDBIssue,
 };

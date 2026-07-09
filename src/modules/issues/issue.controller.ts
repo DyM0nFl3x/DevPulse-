@@ -3,7 +3,8 @@ import { sendResponse } from "../../utility/response";
 import type { IAllIssue, IIssue } from "./issue.interface";
 import { issue } from "./issue.service";
 
-const { createIssueInDB, getAllDBIssues, getSingleDBIssue } = issue;
+const { createIssueInDB, getAllDBIssues, getSingleDBIssue, updateDBIssue } =
+  issue;
 
 const createIssue = async (
   req: Request<{}, {}, IIssue>,
@@ -28,6 +29,7 @@ const createIssue = async (
   }
 };
 
+//! need update
 const getAllIssues = async (
   req: Request<{}, {}, {}, IAllIssue>,
   res: Response,
@@ -57,4 +59,26 @@ const getSingleIssue = async (
     next(error);
   }
 };
-export const issueController = { createIssue, getAllIssues, getSingleIssue };
+
+const updateIssue = async (
+  req: Request<{ id: string }, {}, Partial<IIssue>>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const result = await updateDBIssue(req.body, Number(req.params.id));
+    sendResponse(res, 200, {
+      message: "Issue updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const issueController = {
+  createIssue,
+  getAllIssues,
+  getSingleIssue,
+  updateIssue,
+};
