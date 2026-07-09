@@ -3,7 +3,7 @@ import { sendResponse } from "../../utility/response";
 import type { IAllIssue, IIssue } from "./issue.interface";
 import { issue } from "./issue.service";
 
-const { createIssueInDB, getAllDBIssues } = issue;
+const { createIssueInDB, getAllDBIssues, getSingleDBIssue } = issue;
 
 const createIssue = async (
   req: Request<{}, {}, IIssue>,
@@ -42,4 +42,19 @@ const getAllIssues = async (
     next(error);
   }
 };
-export const issueController = { createIssue, getAllIssues };
+
+const getSingleIssue = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const result = await getSingleDBIssue(Number(req.params.id));
+    sendResponse(res, 200, {
+      data: result[0],
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const issueController = { createIssue, getAllIssues, getSingleIssue };

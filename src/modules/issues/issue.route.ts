@@ -4,7 +4,7 @@ import { authMiddleware } from "../../middleware/auth.middleware";
 import { Roles } from "../../types";
 const router: Router = Router();
 
-const { createIssue, getAllIssues } = issueController;
+const { createIssue, getSingleIssue, getAllIssues } = issueController;
 
 router.post(
   "/",
@@ -12,7 +12,7 @@ router.post(
   createIssue,
 );
 router.get("/", getAllIssues);
-// router.get("/api/issues/:id", () => {});              //! api not found
+router.get("/:id", getSingleIssue);
 // router.patch("/api/issues/:id", () => {});      //! api not found
 // router.delete("/api/issues/:id", () => {});      //! api not found
 

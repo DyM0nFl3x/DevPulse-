@@ -15,11 +15,26 @@ const createIssueInDB = async (data: IIssue, reporterId: number) => {
 
   return result;
 };
+
 const getAllDBIssues = async (data: IAllIssue) => {
+  //!! add challenge later !!
+
   const result = await pool.query(`SELECT * FROM issues`);
   return result.rows;
 };
+
+const getSingleDBIssue = async (id: number) => {
+  const issue = await pool.query(
+    `
+        SELECT * FROM issues
+        WHERE id =${id}
+        `,
+  );
+  return issue.rows;
+};
+
 export const issue = {
   createIssueInDB,
   getAllDBIssues,
+  getSingleDBIssue,
 };
