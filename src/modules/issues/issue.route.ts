@@ -4,7 +4,7 @@ import { authMiddleware } from "../../middleware/auth.middleware";
 import { Roles } from "../../types";
 const router: Router = Router();
 
-const { createIssue, getSingleIssue, getAllIssues, updateIssue } =
+const { createIssue, getSingleIssue, getAllIssues, updateIssue, deleteIssue } =
   issueController;
 
 //* protected routes
@@ -19,8 +19,12 @@ router.patch(
   authMiddleware(Roles.CONTRIBUTOR, Roles.MAINTAINER),
   updateIssue,
 );
-// router.delete("/api/issues/:id", () => {});      //! api not found
 
+router.delete(
+  "/:id",
+  authMiddleware(Roles.CONTRIBUTOR, Roles.MAINTAINER),
+  deleteIssue,
+); //! api not found
 
 //! unprotected routes
 router.get("/", getAllIssues);

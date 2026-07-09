@@ -38,14 +38,14 @@ const updateDBIssue = async (data: Partial<IIssue>, id: number) => {
 
   // At least one field is required
   if (title === undefined && description === undefined && type === undefined) {
-    throw new Error("No data provided for update");
+    throw new Error("No data provided for update!");
   }
 
   // Check issue exists
   const existing = await pool.query("SELECT * FROM issues WHERE id = $1", [id]);
 
   if (existing.rowCount === 0) {
-    throw new Error("No issues found");
+    throw new Error("No issues found!");
   }
 
   const issue = existing.rows[0];
@@ -60,7 +60,7 @@ const updateDBIssue = async (data: Partial<IIssue>, id: number) => {
     newDescription === issue.description &&
     newType === issue.type
   ) {
-    throw new Error("No changes detected");
+    throw new Error("No changes detected!");
   }
 
   // Update
@@ -81,9 +81,22 @@ const updateDBIssue = async (data: Partial<IIssue>, id: number) => {
   return result.rows[0];
 };
 
+const deleteDBIssue = async (id: number) => {
+  const data = await pool.query(
+    `
+     DELETE FROM issues
+    WHERE id = $1
+    RETURNING *;
+    `,
+    [id],
+  );
+  return data;
+};
+
 export const issue = {
   createIssueInDB,
   getAllDBIssues,
   getSingleDBIssue,
   updateDBIssue,
+  deleteDBIssue,
 };

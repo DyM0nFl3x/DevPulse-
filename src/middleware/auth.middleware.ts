@@ -25,7 +25,14 @@ export const authMiddleware = (...roles: Role[]) => {
         });
       }
       const decoded = jwt.verify(userToken, config.secret) as IJwtPayload;
-      console.log(decoded);
+
+      if (roles.length && !roles.includes(decoded.role)) {
+        return sendResponse(res, 403, {
+          message: "Access Forbidden!",
+          errors: "Access is not available for the role",
+        });
+      }
+
       if (req.method === "PATCH") {
         const issueData = await issue.getSingleDBIssue(Number(req.params.id));
         const reporterId = issueData[0].reporter_id;

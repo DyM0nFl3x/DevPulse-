@@ -3,8 +3,13 @@ import { sendResponse } from "../../utility/response";
 import type { IAllIssue, IIssue } from "./issue.interface";
 import { issue } from "./issue.service";
 
-const { createIssueInDB, getAllDBIssues, getSingleDBIssue, updateDBIssue } =
-  issue;
+const {
+  createIssueInDB,
+  getAllDBIssues,
+  getSingleDBIssue,
+  deleteDBIssue,
+  updateDBIssue,
+} = issue;
 
 const createIssue = async (
   req: Request<{}, {}, IIssue>,
@@ -76,9 +81,26 @@ const updateIssue = async (
   }
 };
 
+const deleteIssue = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const result = await deleteDBIssue(Number(req.params.id));
+    if (result.rowCount === 0) {
+      throw new Error("No issue found!");
+    }
+    sendResponse(res, 200, { message: "Issue deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const issueController = {
   createIssue,
   getAllIssues,
   getSingleIssue,
   updateIssue,
+  deleteIssue,
 };
