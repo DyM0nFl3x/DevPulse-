@@ -31,7 +31,7 @@ export default function styleConsole({
 ${coloredTitle}
 
 🌍 Server      : ${server ? chalk.green("Running ✅") : chalk.red("Stopped ❌")}
-🗄️ Database    : ${database ? chalk.green("Connected ✅") : chalk.red("Failed ❌")}
+🗄️ Database     : ${database ? chalk.green("Connected ✅") : chalk.red("Failed ❌")}
 🔌 Port        : ${chalk.yellow(port)}
 ⏰ Started     : ${chalk.white(new Date().toLocaleString())}
 `,
@@ -42,7 +42,7 @@ ${coloredTitle}
         margin: 1,
         borderStyle: "double",
         borderColor: "cyan",
-      }
-    )
+      },
+    ),
   );
 }

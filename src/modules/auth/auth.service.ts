@@ -3,9 +3,9 @@ import type { ILoginPayload, ISignupPayload } from "./auth.interface";
 import { pool } from "../../db";
 import jwt from "jsonwebtoken";
 import config from "../../config";
+import type { IJwtPayload } from "../../types";
 
 const signupService = async (payload: ISignupPayload) => {
-  console.log(payload);
   const { email, name, password, role } = payload;
   const hashedPassword = await hash(password, 10);
 
@@ -42,7 +42,7 @@ const loginService = async (payload: ILoginPayload) => {
 
   if (comparePassword) {
     //token generation
-    const jwtPayload = {
+    const jwtPayload:IJwtPayload = {
       id: rest.id,
       name: rest.name,
       role: rest.role,

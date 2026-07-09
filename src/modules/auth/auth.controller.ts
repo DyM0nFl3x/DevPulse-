@@ -20,7 +20,6 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
 const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {generateToken:token,rest:user} = await authService.loginService(req.body);
-    // console.log(result);
     sendResponse(res, 200, {
       message: "User login successfully.",
       data: {token,user},
