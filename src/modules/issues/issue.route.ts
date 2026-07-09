@@ -1,11 +1,7 @@
 import { Router } from "express";
-import authRouter from "./auth.route";
 
-const router = Router();
 
-router.use("/auth", authRouter);
-// router.use("/issues", authRouter);
-
+const router: Router = Router();
 
 // router.post("/api/issues", () => {});
 // router.get("/api/issues?sort=newest", () => {});
@@ -13,4 +9,4 @@ router.use("/auth", authRouter);
 // router.patch("/api/issues/:id", () => {});
 // router.delete("/api/issues/:id", () => {});
 
-export default router;
+export const issueRoute = router;
