@@ -24,10 +24,10 @@ const createIssue = async (
     }
 
     const result = await createIssueInDB(req.body, reporterId);
-
+    console.log(result);
     sendResponse(res, 201, {
       message: "Issue created successfully",
-      data: result,
+      data: result.rows[0],
     });
   } catch (error) {
     next(error);
