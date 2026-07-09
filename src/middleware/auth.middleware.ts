@@ -47,6 +47,10 @@ export const authMiddleware = (...roles: Role[]) => {
         }
       }
 
+      if (req.method === "DELETE" && decoded.role !== "maintainer") {
+        throw new Error("Only maintainers can delete issues.");
+      }
+
       req.user = decoded;
       next();
     } catch (error) {

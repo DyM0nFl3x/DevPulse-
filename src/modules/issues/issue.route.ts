@@ -24,7 +24,7 @@ router.delete(
   "/:id",
   authMiddleware(Roles.CONTRIBUTOR, Roles.MAINTAINER),
   deleteIssue,
-); //! api not found
+);
 
 //! unprotected routes
 router.get("/", getAllIssues);
