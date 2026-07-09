@@ -6,8 +6,7 @@ export const Roles = {
 export type Role = (typeof Roles)[keyof typeof Roles];
 
 
-export interface ISendResponse<T> {
-  success: boolean;
+export interface ApiResponse<T> {
   message?: string;
   data?: T;
   errors?: string;
