@@ -1,5 +1,5 @@
 import { pool } from "../../db";
-import type { IIssue } from "./issue.interface";
+import type { IAllIssue, IIssue } from "./issue.interface";
 
 const createIssueInDB = async (data: IIssue, reporterId: number) => {
   const { title, description, type } = data;
@@ -13,9 +13,13 @@ const createIssueInDB = async (data: IIssue, reporterId: number) => {
     [title, description, type, reporterId],
   );
 
-  return result.rows[0];
+  return result;
 };
-
+const getAllDBIssues = async (data: IAllIssue) => {
+  const result = await pool.query(`SELECT * FROM issues`);
+  return result.rows;
+};
 export const issue = {
   createIssueInDB,
+  getAllDBIssues,
 };

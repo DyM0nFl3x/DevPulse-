@@ -1,9 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 import { sendResponse } from "../../utility/response";
-import type { IIssue } from "./issue.interface";
+import type { IAllIssue, IIssue } from "./issue.interface";
 import { issue } from "./issue.service";
 
-const { createIssueInDB } = issue;
+const { createIssueInDB, getAllDBIssues } = issue;
 
 const createIssue = async (
   req: Request<{}, {}, IIssue>,
@@ -27,4 +27,19 @@ const createIssue = async (
     next(error);
   }
 };
-export const issueController = { createIssue };
+
+const getAllIssues = async (
+  req: Request<{}, {}, {}, IAllIssue>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const result = await getAllDBIssues(req.query);
+    sendResponse(res, 200, {
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const issueController = { createIssue, getAllIssues };
