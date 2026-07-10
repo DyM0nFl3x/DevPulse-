@@ -19,6 +19,7 @@ const createIssue = async (
 ) => {
   try {
     const { title, description, type } = req.body;
+    console.log(req.body);
     validateIssue(title, description, type);
 
     const reporterId = req.user?.id;

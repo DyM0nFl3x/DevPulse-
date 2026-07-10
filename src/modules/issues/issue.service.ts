@@ -3,7 +3,7 @@ import type { IAllIssue, IIssue } from "./issue.interface";
 
 const createIssueInDB = async (data: IIssue, reporterId: number) => {
   const { title, description, type } = data;
-
+console.log(data);
   const result = await pool.query(
     `
         INSERT INTO issues(title, description, type, reporter_id)

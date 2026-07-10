@@ -17,13 +17,15 @@ export const authMiddleware = (...roles: Role[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userToken = req.headers.authorization;
-
+      let issueData;
+      let reporterId;
       if (!userToken) {
         return sendResponse(res, 401, {
           message: "Unauthorized access",
           errors: "User is not authorized",
         });
       }
+
       const decoded = jwt.verify(userToken, config.secret) as IJwt;
 
       if (roles.length && !roles.includes(decoded.role)) {
@@ -33,12 +35,12 @@ export const authMiddleware = (...roles: Role[]) => {
         });
       }
 
-      const issueData = await issue.getSingleDBIssue(Number(req.params.id));
-      if (issueData.length === 0) {
-        throw new Error("No Issue Found");
-      }
-      const reporterId = issueData[0].reporter_id;
       if (req.method === "PATCH") {
+        issueData = await issue.getSingleDBIssue(Number(req.params.id));
+        if (issueData.length === 0) {
+          throw new Error("No Issue Found");
+        }
+        reporterId = issueData[0].reporter_id;
         if (decoded.role === "contributor") {
           if (decoded.id !== reporterId) {
             throw new Error("You are not allowed to update this issue.");
@@ -49,12 +51,16 @@ export const authMiddleware = (...roles: Role[]) => {
           }
         }
       }
-      if (decoded.id !== reporterId) {
-        throw new Error("You can only delete issues that you created.");
-      }
 
-      if (req.method === "DELETE" && decoded.role !== "maintainer") {
-        throw new Error("Only maintainers can delete issues.");
+      if (req.method === "DELETE") {
+        issueData = await issue.getSingleDBIssue(Number(req.params.id));
+        if (issueData.length === 0) {
+          throw new Error("No Issue Found");
+        }
+        reporterId = issueData[0].reporter_id;
+        if (decoded.role === "contributor" && decoded.id !== reporterId) {
+          throw new Error("You can only delete issues that you created.");
+        }
       }
 
       req.user = decoded;
