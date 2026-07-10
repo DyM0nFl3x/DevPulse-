@@ -35,6 +35,9 @@ export const authMiddleware = (...roles: Role[]) => {
 
       if (req.method === "PATCH") {
         const issueData = await issue.getSingleDBIssue(Number(req.params.id));
+        if (issueData.length === 0) {
+          throw new Error("No Issue Found");
+        }
         const reporterId = issueData[0].reporter_id;
         if (decoded.role === "contributor") {
           if (decoded.id !== reporterId) {
