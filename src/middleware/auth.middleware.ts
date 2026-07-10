@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import type { IJwtPayload, Role } from "../types";
+import type { IJwt, Role } from "../types";
 import { sendResponse } from "../utility/response";
 import config from "../config";
 import jwt from "jsonwebtoken";
@@ -8,7 +8,7 @@ import { issue } from "../modules/issues/issue.service";
 declare global {
   namespace Express {
     interface Request {
-      user?: IJwtPayload;
+      user?: IJwt;
     }
   }
 }
@@ -24,7 +24,7 @@ export const authMiddleware = (...roles: Role[]) => {
           errors: "User is not authorized",
         });
       }
-      const decoded = jwt.verify(userToken, config.secret) as IJwtPayload;
+      const decoded = jwt.verify(userToken, config.secret) as IJwt;
 
       if (roles.length && !roles.includes(decoded.role)) {
         return sendResponse(res, 403, {

@@ -15,7 +15,7 @@ export interface ApiResponse<T> {
 }
 
 
-export interface IJwtPayload extends JwtPayload {
+export interface IJwt extends JwtPayload {
   id: number;
   name: string;
   role: Role;

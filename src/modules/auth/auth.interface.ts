@@ -1,6 +1,6 @@
 import type { Role } from "../../types";
 
-export interface ISignupPayload {
+export interface ISignup {
   name: string;
   email: string;
   password: string;
@@ -8,7 +8,7 @@ export interface ISignupPayload {
 }
 
 
-export interface ILoginPayload {
+export interface ILogin {
   email: string;
   password: string;
 }

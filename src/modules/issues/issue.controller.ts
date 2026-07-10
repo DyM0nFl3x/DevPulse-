@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { sendResponse } from "../../utility/response";
 import type { IAllIssue, IIssue } from "./issue.interface";
 import { issue } from "./issue.service";
+import { validateIssue } from "./issue.utils";
 
 const {
   createIssueInDB,
@@ -17,14 +18,15 @@ const createIssue = async (
   next: NextFunction,
 ) => {
   try {
-    const reporterId = req.user?.id;
+    const { title, description, type } = req.body;
+    validateIssue(title, description, type);
 
+    const reporterId = req.user?.id;
     if (!reporterId) {
       throw new Error("User information is missing");
     }
 
     const result = await createIssueInDB(req.body, reporterId);
-    console.log(result);
     sendResponse(res, 201, {
       message: "Issue created successfully",
       data: result.rows[0],

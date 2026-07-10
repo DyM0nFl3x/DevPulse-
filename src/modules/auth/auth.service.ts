@@ -1,11 +1,11 @@
 import { compare, hash } from "bcrypt";
-import type { ILoginPayload, ISignupPayload } from "./auth.interface";
+import type { ILogin, ISignup } from "./auth.interface";
 import { pool } from "../../db";
 import jwt from "jsonwebtoken";
 import config from "../../config";
-import type { IJwtPayload } from "../../types";
+import type { IJwt } from "../../types";
 
-const signupService = async (payload: ISignupPayload) => {
+const signupService = async (payload: ISignup) => {
   const { email, name, password, role } = payload;
   const hashedPassword = await hash(password, 10);
 
@@ -21,7 +21,7 @@ const signupService = async (payload: ISignupPayload) => {
   return result.rows[0];
 };
 
-const loginService = async (payload: ILoginPayload) => {
+const loginService = async (payload: ILogin) => {
   const { email, password } = payload;
   //Check if user exists?
   const checkUserFromDB = await pool.query(
@@ -42,7 +42,7 @@ const loginService = async (payload: ILoginPayload) => {
 
   if (comparePassword) {
     //token generation
-    const jwtPayload:IJwtPayload = {
+    const jwtPayload:IJwt = {
       id: rest.id,
       name: rest.name,
       role: rest.role,

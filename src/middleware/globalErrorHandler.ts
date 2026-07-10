@@ -84,6 +84,14 @@ export const globalErrorHandler: ErrorRequestHandler = (
           message: "Access denied.",
           errors: error.message,
         });
+
+      // case "Title Required":
+      // case "Description Required":
+      // case "Type Required":
+      //   return sendResponse(res, 400, {
+      //     message: "Validation failed.",
+      //     errors: error.message,
+      //   });
     }
   }
 
