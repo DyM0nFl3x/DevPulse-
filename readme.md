@@ -4,9 +4,9 @@ A RESTful Issue Tracking API built with Node.js, Express, TypeScript, and Postgr
 
 ## Live Links
 
-- **API:** `https://my-live-url.com`
-- **Repository:** `https://github.com/DyM0nFl3x/DevPulse-.git`
-- **Video:** `https://video.com/my-username/devpulse-video`
+- **Live Link:** https://assignment-2-pi-ten.vercel.app/
+- **Repository:** https://github.com/DyM0nFl3x/DevPulse-.git
+- **Video:** https://video.com/my-username/devpulse-video
 
 ## Features
 
