@@ -36,7 +36,6 @@ const createIssue = async (
   }
 };
 
-//! need update
 const getAllIssues = async (
   req: Request<{}, {}, {}, IAllIssue>,
   res: Response,
@@ -59,6 +58,9 @@ const getSingleIssue = async (
 ) => {
   try {
     const result = await getSingleDBIssue(Number(req.params.id));
+    if (result.length === 0) {
+      throw new Error("No Issue Found");
+    }
     sendResponse(res, 200, {
       data: result[0],
     });

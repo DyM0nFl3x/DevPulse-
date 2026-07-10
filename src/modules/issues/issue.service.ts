@@ -17,9 +17,37 @@ const createIssueInDB = async (data: IIssue, reporterId: number) => {
 };
 
 const getAllDBIssues = async (data: IAllIssue) => {
-  //!! add challenge later !!
+  const { status, type, sort = "newest" } = data;
 
-  const result = await pool.query(`SELECT * FROM issues`);
+  let query = `
+    SELECT *
+    FROM issues
+  `;
+
+  const values: string[] = [];
+  const conditions: string[] = [];
+
+  if (status) {
+    conditions.push(`status = $${values.length + 1}`);
+    values.push(status);
+  }
+
+  if (type) {
+    conditions.push(`type = $${values.length + 1}`);
+    values.push(type);
+  }
+
+  if (conditions.length > 0) {
+    query += ` WHERE ${conditions.join(" AND ")}`;
+  }
+
+  query +=
+    sort === "oldest"
+      ? " ORDER BY created_at ASC"
+      : " ORDER BY created_at DESC";
+
+  const result = await pool.query(query, values);
+
   return result.rows;
 };
 

@@ -89,7 +89,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
           "Type Required": "Issue type is required.",
           "Description Too Short": "Issue description is too short.",
           "Invalid Issue Type": "Invalid issue type.",
-          "No Issue Found": "Issue not found for update.",
+          "No Issue Found": "Issue not found.",
           "No data provided for update!": "No data provided for issue update.",
         };
 
@@ -98,6 +98,18 @@ export const globalErrorHandler: ErrorRequestHandler = (
           errors: error.message,
         });
       }
+
+      case "Only maintainers can delete issues.":
+        return sendResponse(res, 403, {
+          message: "Access denied.",
+          errors: error.message,
+        });
+
+      case "You can only delete issues that you created.":
+        return sendResponse(res, 403, {
+          message: "Access denied.",
+          errors: error.message,
+        });
     }
   }
 
