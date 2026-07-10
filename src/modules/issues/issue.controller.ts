@@ -43,6 +43,9 @@ const getAllIssues = async (
 ) => {
   try {
     const result = await getAllDBIssues(req.query);
+    if (result.length===0) {
+      throw Error ("No Issue Found")
+    }
     sendResponse(res, 200, {
       data: result,
     });
